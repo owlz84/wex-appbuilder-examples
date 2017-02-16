@@ -1,0 +1,68 @@
+<em>(first 10 results extracted from Scandocs)</em><hr/>
+
+<% @sd_pid = subject.scandocs.where(field("docclass").is("Scandoc:PID")) %>
+<% @sd_slcable = subject.scandocs.where(field("docclass").is("Scandoc:SLCable")) %>
+<% @sd_other = subject.scandocs.where(field("docclass").exists.negated) %>
+
+<strong><%="Process & Instrumentation Diagram (#{@sd_pid.size})" %></strong>
+<span style="font-size:0.8em">
+<% @sd_pid.each do |doc| %>
+	<% if doc.present? %>
+		<%= entity_link_to(doc.title, doc) %>
+	<% else %>
+		None found
+	<% end %>
+<% end %>
+</span>
+<hr/>
+
+<strong><%= "Single Line Cabling Diagram (#{@sd_slcable.size})" %></strong>
+<span style="font-size:0.8em">
+<% @sd_slcable.each do |doc| %>
+	<% if doc.present? %>
+		<%= entity_link_to(doc.title, doc) %>
+	<% else %>
+		None found
+	<% end %>
+<% end %>
+</span>
+<hr/>
+
+<strong><%= "Other (#{@sd_other.size})" %></strong>
+<span style="font-size:0.8em">
+<% @sd_other.each do |doc| %>
+	<% if doc.present? %>
+		<%= entity_link_to(doc.title, doc) %>
+	<% else %>
+		None found
+	<% end %>
+<% end %>
+</span>
+<hr/>
+
+<%
+	# specify collection we wish to search (Scandoc)
+	collection = [{"n" => "scandoc"}]
+	collection_token = [{"id" => "%entityTypes%",
+		"logic" => "AND",
+		"s" => collection}]
+
+	# build a "token" for the search URL
+	collection_token_json = ({"s": collection_token}).to_json
+	collection_token_escaped = URI.escape(collection_token_json)
+
+	# build the token to specify the site
+	location = [{"n" => subject["site-code"]}]
+	location_token = [{"id" => "search-refinement-locationcode",
+		"xPath" => "$location_code",
+		"logic" => "OR",
+		"s" => location}]
+	
+	# build a "token" for the search URL
+	location_token_json = ({"s": location_token}).to_json
+	location_token_escaped = URI.escape(location_token_json)
+
+	url = "http://10.99.98.70:8080/AppBuilder/search?button=search&expand_all=false&id=&page=0&q=&refinements_token=#{collection_token_escaped}&selected_tokens[]=#{location_token_escaped}"
+%>
+
+<%= raw "<a href=#{url}>Click for all Scandocs</a>" %>

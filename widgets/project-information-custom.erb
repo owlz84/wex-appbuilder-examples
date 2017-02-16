@@ -1,0 +1,15 @@
+<% sites = subject.sites %>
+<% sites = sites.sorted_by(field("site").in_ascending_order) %>
+<b>Project title</b><br/>
+<%= subject["project-code"].first + ": " + subject["project-title"].first %>
+<hr/>
+<b>Site</b>
+  <% sites.each do |site| %>
+    <br/>
+    <%= entity_link_to(site["site"].first +
+                          " (" + site["site-code"].first + ")",
+                          site) %>
+  <% end %>
+<hr/>
+<b>Project start date</b><br/>
+<%= subject["project-start-date"].first %>

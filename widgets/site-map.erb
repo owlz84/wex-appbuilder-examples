@@ -1,0 +1,18 @@
+<%
+  height = 300
+  width = 300
+  api_key = "AIzaSyB1mzAqgzPVKs3ViTvdV2HmxD5BZ3pLHHc"
+  marker_size = "mid"
+  location_string = ""
+  unless @subject['site-address'].first.nil?
+    location_string = "#{subject['site-address'].first.to_s}"
+    location_string = URI.escape(location_string)
+  end
+
+  url = "https://maps.googleapis.com/maps/api/staticmap?" +
+      "center=#{location_string}&zoom=14&maptype=satellite" +
+      "&size=#{width}x#{height}" +
+      "&markers=size:#{marker_size}|color:green|#{location_string}&key=#{api_key}"
+%>
+
+<%= raw "<a href=http://maps.google.com?q=#{location_string}><img src=#{url} /></a>" %>

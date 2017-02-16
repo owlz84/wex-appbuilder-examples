@@ -1,0 +1,38 @@
+<%
+  relatedProjects = Array.new
+
+  # Iterate through documents
+  docs = subject.projectdocs
+  docs.each do |doc|
+      projectCodes = doc["project-code"]
+      projectCodes.each do |projectCode|
+          unless projectCode == subject["project-code"].first
+              relatedProjects << projectCode
+          end
+      end
+  end
+  
+  relatedHash = Hash.new(0)
+  relatedProjects.each do |project|
+      relatedHash[project] += 1
+  end
+%>
+
+<table cellpadding="10" width="50%">
+    <tr>
+        <th align="left"><strong>Project</strong></th>
+        <th align="left"><strong>Documents</strong></th>
+    </tr>
+    <% relatedHash.each do |k, v| %>
+    <% @currentrelatedproject = entity_type("project").where(field("project-code").is(k)).first %>
+    <% @currentrelatedprojecttitle = @currentrelatedproject["project-code"].first + ": " + @currentrelatedproject["project-title"].first %>
+    <tr>
+        <td>
+          <%= entity_link_to(@currentrelatedprojecttitle, @currentrelatedproject) %>
+        </td>
+        <td>
+            <%= raw v %>
+        </td>
+    </tr>
+    <% end %>
+</table>
