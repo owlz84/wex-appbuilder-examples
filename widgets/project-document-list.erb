@@ -1,0 +1,30 @@
+<!-- Display project documents in a neater style -->
+
+<%
+    docs = subject.projectdocs
+    docs = docs.sorted_by(field("last-modified").in_descending_order)
+    docs = docs.first(10)
+%>
+
+<table  cellpadding="10" width="100%">
+  <tr>
+    <th align="left">
+      <strong>Filename</strong>
+    </th>
+    <th align="left">
+      <strong>Title</strong>
+    </th>
+  </tr>
+
+  <% docs.each do |doc| %>
+  <tr>
+    <td align="left">
+      Placeholder
+      <%# entity_link_to(doc["url"].first, doc) %>
+    </td>
+    <td align="left">
+      <%= entity_link_to(doc["title"].first, doc) %>
+    </td>
+  </tr>
+  <% end %>
+</table>

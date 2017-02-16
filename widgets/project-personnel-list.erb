@@ -1,0 +1,44 @@
+<%
+docs = subject.projectdocs.requesting(10000)
+aPersonRoles = Array.new(0) {Array.new(4,0)}
+aRoles = Array.new
+searchurl="http://10.99.98.70:8080/AppBuilder/search?utf8=%E2%9C%93&button=search&q="
+
+# read in person and role details from the documents
+docs.each do |doc|
+	docpersonroles = doc["person_role"]
+	docpersonroles.each do |personRole|
+		aPersonRoles << (personRole.split("|") << personRole << 0)
+		aRoles << personRole.split("|").last
+	end
+end
+
+# count doc occurences of person, role combinations
+personRoleCounts = Hash.new(0)
+aPersonRoles.each do |person, personrole, prjoined, prcount|
+  personRoleCounts[prjoined] += 1
+end
+
+# append to data frame
+aPersonRoles.map! {|person, personrole, prjoined, prcount| [person, personrole, prjoined, personRoleCounts[prjoined]] }
+
+# distinct and sort person roles by occurence count, name
+aPersonRoles.uniq!
+aPersonRoles.sort! {|a, b| a[0] <=> b[0] }.reverse!
+aPersonRoles.sort! {|a, b| a[3] <=> b[3] }.reverse!
+
+# distinct and sort role descriptions
+aRoles.uniq!
+aRoles.sort! { |a, b| a <=> b } 
+%>
+
+<!-- iterate through roles and output relevant people and doc counts -->
+<% aRoles.each do |role| %>
+	<strong><%= role %></strong><br/>
+	<% aPersonRoles.each do |person, personrole, prjoined, prcount| %>
+		<% if personrole == role %>
+      <%= raw "<a href=#{searchurl}#{URI.escape(person)}>#{person} (#{prcount.to_s})</a><br/>" %>
+		<% end %>
+	<% end %>
+	<hr/>
+<% end %>

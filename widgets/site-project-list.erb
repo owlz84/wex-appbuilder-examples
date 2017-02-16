@@ -1,0 +1,24 @@
+<b class="custom_widget_label">At this site</b>
+<hr/>
+<table class="custom_widget_table">
+  <tr>
+    <th>Code</th>
+    <th>Title</th>
+    <th>Start</th>
+  </tr>
+  <% @projects = subject.projects %>
+  <% @projects = @projects.sorted_by(field("project-start-date").in_descending_order) %>
+  <% @projects.each do |project| %>
+    <tr>
+      <td><%= entity_link_to(
+                project['project-code'].first,
+                project) %> </td>
+      <td><%= entity_link_to(
+                project['project-title'].first,
+                project) %> </td>
+      <td><%= entity_link_to(
+                project['project-start-date'].first,
+                project) %> </td>
+    </tr>
+  <% end %>
+</table>

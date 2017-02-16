@@ -1,0 +1,84 @@
+<em>(extracted from AssetDocs)</em><hr/>
+
+<% 
+ad_som = subject.assetdocs.where(field("url").contains("site operating manual"))
+ad_siteplan = subject.assetdocs.where(field("url").contains("site plan"))
+ad_servplan = subject.assetdocs.where(field("url").contains("services plan"))
+ad_pbd = subject.assetdocs.where(field("url").contains("process block diagram"))
+ad_she = subject.assetdocs.where(
+	field("url").contains("biodiversity").or(
+		field("url").contains("safety").or(
+			field("url").contains("emergency").or(
+				field("url").contains("incident").or(
+					field("url").contains("asbestos")
+				)
+			)
+		)
+	)
+)
+preview_url = "http://10.99.98.70:8080/AppBuilder/rich_preview?id="
+preview_type = "&type=assetdoc"
+
+%>
+
+
+
+<strong>Site Operating Manuals (<%= ad_som.size %>)</strong>
+<span style="font-size:0.8em">
+<% ad_som.each do |doc| %>
+	<% if doc.present? %>
+    <%= raw "<br/><a href=#{preview_url}#{doc.id}#{preview_type}>#{doc.title}</a>" %>
+	<% else %>
+		None found
+	<% end %>
+<% end %>
+</span>
+<hr/>
+
+<strong>Site Plans (<%= ad_siteplan.size %>)</strong>
+<span style="font-size:0.8em">
+<% ad_siteplan.each do |doc| %>
+	<% if doc.present? %>
+		<%= raw "<br/><a href=#{preview_url}#{doc.id}#{preview_type}>#{doc.title}</a>" %>
+	<% else %>
+		None found
+	<% end %>
+<% end %>
+</span>
+<hr/>
+
+<strong>Services Plans (<%= ad_servplan.size %>)</strong>
+<span style="font-size:0.8em">
+<% ad_servplan.each do |doc| %>
+	<% if doc.present? %>
+		<%= raw "<br/><a href=#{preview_url}#{doc.id}#{preview_type}>#{doc.title}</a>" %>
+	<% else %>
+		None found
+	<% end %>
+<% end %>
+</span>
+<hr/>
+
+<strong>Process Block Diagrams (<%= ad_pbd.size %>)</strong>
+<span style="font-size:0.8em">
+<% ad_pbd.each do |doc| %>
+	<% if doc.present? %>
+		<%= raw "<br/><a href=#{preview_url}#{doc.id}#{preview_type}>#{doc.title}</a>" %>
+	<% else %>
+		None found
+	<% end %>
+<% end %>
+</span>
+<hr/>
+
+<strong>Safety, Health & Environment (<%= ad_she.size %>)</strong>
+<span style="font-size:0.8em">
+<% ad_she.each do |doc| %>
+	<% if doc.present? %>
+		<%= raw "<br/><a href=#{preview_url}#{doc.id}#{preview_type}>#{doc.title}</a>" %>
+	<% else %>
+		None found
+	<% end %>
+<% end %>
+</span>
+<hr/>

@@ -1,0 +1,26 @@
+<em>Latest modified documents by project</em>
+<hr/>
+<% @projects = subject.projects %>
+<% @projects = @projects.sorted_by(field("project-start-date").in_descending_order) %>
+<% @projects.each do |project| %>
+	<b><%= project["project-code"].first + ": " + project["project-title"].first %></b>
+	
+	<table cellpadding="10" width="80%">
+		<% @docs = project.projectdocs %>
+		<% @docs = @docs.sorted_by(field("last-modified").in_descending_order) %>
+		<% @docs = @docs.first(5) %>
+		<% if @docs.present? %>
+			<% @docs.each do |doc| %>
+				<tr>
+					<td align="left">	<%= entity_link_to(doc.title,	doc)%></td>
+					<td align="left"><%= doc["last-modified"].first.to_s.first(14) %></td>
+				</tr>
+			<% end %>
+		<% else %>
+			<tr>
+				<td align="left">No docs found</td>
+			</tr>
+		<% end %>
+	</table>
+	<hr/>
+<% end %>

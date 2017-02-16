@@ -1,0 +1,5 @@
+<% docs = subject.projectdocs %>
+
+<% docs.each do |doc| %>
+  <%= entity_link_to(doc.title, doc) unless doc["docclass"].size > 0 %>
+<% end %>
